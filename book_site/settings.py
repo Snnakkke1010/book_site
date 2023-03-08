@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 import environ
 import os
@@ -24,7 +25,16 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'rest_framework',
     'django_filters',
-    'corsheaders'
+    'corsheaders',
+    'drf_spectacular',
+    'djoser'
+]
+
+INSTALLED_APPS += [
+    'api',
+    'main',
+    'user',
+    'book'
 ]
 
 MIDDLEWARE = [
@@ -80,6 +90,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -89,6 +100,8 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
     ],
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -125,7 +138,7 @@ CSRF_COOKIE_SECURE = False
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Book site',
-        'DESCRIPTIONS': 'Website with ua books',
+    'DESCRIPTION': 'Website with ua books',
     'VERSION': '1.0.0',
 
     'SERVER_PERMISSIONS': {
@@ -137,10 +150,38 @@ SPECTACULAR_SETTINGS = {
     },
 
     'SWAGGER_UI_SETTINGS': {
-        'eepLInking': True,
-        'isplayOperationId': True
+        'deepLinking': True,
+        'displayOperationId': True
     },
 
     'COMPONENT_SPLIT_REQUEST': True,
     'SORT_OPERATIONS': False,
+}
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/token',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/token',
+    'ACTIVATION_URL': '#activate/{uid}/token',
+    'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {},
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 }
