@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}TITLE{% endblock %}</title>
+</head>
+<body>
+    {% block header %}
+        <header class="header">
+            <div class="header__items-display navbar">
+                <div class="navbar__logo">
+                    <h1>RDM <span class="navbar__logo_dop-text"> read me now </span> </h1>
+                </div>
+                <nav class="nav">
+                    <a class="nav__links" href="#">Home</a>
+                    <a class="nav__links" href="#">About</a>
+                    <a class="nav__links" href="#">Contacts</a>
+                    <a class="nav__links" href="#">Books Shop</a>
+                </nav>
+                <div class="navbar__user-block user-nav">
+                    {% if user.is_authenticated %}
+                        <div class="user-nav__nickname">
+                            <a class="user-nav__nickname_href" href="#">{{ request.user }}</a>
+                        </div>
+                        <div class="user-nav__cart">
+                            <a class="user-nav__cart_href" href="#">View Cart</a>
+                        </div>
+                    {% else %}
+                        <div class="user-nav__sign-up">
+                            <a class="user-nav__sign-up_href" href="#">Sign-up</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+    {% endblock %}
+
+    {% block content %}
+        <h1>CONTENT</h1>
+    {% endblock %}
+</body>
+</html>
